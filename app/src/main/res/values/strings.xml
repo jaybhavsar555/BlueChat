@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BlueChat</string>
+    <string name="title_activity_first_screen">FirstScreenActivity</string>
+    <string name="title_activity_first_screen_acivity">FirstScreenAcivity</string>
+</resources>
