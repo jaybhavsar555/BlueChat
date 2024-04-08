@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bluechat.domain.chat.BluetoothMessage
-import com.example.bluechat.ui.theme.BluetoothChatTheme
+import com.example.bluechat.ui.theme.BlueChatTheme
 import com.example.bluechat.ui.theme.OldRose
 import com.example.bluechat.ui.theme.Vanilla
 
@@ -54,7 +54,7 @@ fun ChatMessage(
 @Preview
 @Composable
 fun ChatMessagePreview() {
-    BluetoothChatTheme {
+    BlueChatTheme {
         ChatMessage(
             message = BluetoothMessage(
                 message = "Hello World!",

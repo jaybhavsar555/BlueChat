@@ -11,3 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val bgBlue=Color(0xFF4D87F9)
 val lgBlue= Color(0xFF96B3ED)
+
+val OldRose = Color(0xFFcd8b76)
+val Vanilla = Color(0xFFe1d89f)

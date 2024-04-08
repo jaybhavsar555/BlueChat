@@ -1,6 +1,6 @@
-package com.plcoding.bluetoothchat.data.chat
+package com.example.bluechat.data.chat
 
-import com.plcoding.bluetoothchat.domain.chat.BluetoothMessage
+import com.example.bluechat.domain.chat.BluetoothMessage
 
 fun String.toBluetoothMessage(isFromLocalUser: Boolean): BluetoothMessage {
     val name = substringBeforeLast("#")

@@ -12,7 +12,8 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import com.example.bluechat.domain.chat.BluetoothController
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
-import com.plcoding.bluechat.data.chat.BluetoothStateReceiver
+import com.example.bluechat.domain.chat.BluetoothMessage
+import com.example.bluechat.domain.chat.ConnectionResult
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +55,7 @@ class AndroidBluetoothController(
     private val foundDeviceReceiver = FoundDeviceReceiver { device ->
         _scannedDevices.update { devices ->
             val newDevice = device.toBluetoothDeviceDomain()
-            if(newDevice in devices) devices else devices + newDevice
+            if(newDevice in devices) devices else devices.plusElement(newDevice)
         }
     }
 

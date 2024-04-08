@@ -1,4 +1,4 @@
-package com.plcoding.bluechat.data.chat
+package com.example.bluechat.data.chat
 
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
