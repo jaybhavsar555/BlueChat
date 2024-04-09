@@ -210,8 +210,8 @@ class AndroidBluetoothController(
     }
 
     override fun release() {
-        context.unregisterReceiver(foundDeviceReceiver)
-        context.unregisterReceiver(bluetoothStateReceiver)
+//        context.unregisterReceiver(foundDeviceReceiver)
+//        context.unregisterReceiver(bluetoothStateReceiver)
         closeConnection()
     }
 

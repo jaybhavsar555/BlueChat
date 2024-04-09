@@ -24,10 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.composable
 import com.example.bluechat.presentation.BluetoothOnOffScreen
 import com.example.bluechat.presentation.BluetoothViewModel
-import com.example.bluechat.presentation.ConnectToDeviceScreen
 import com.example.bluechat.presentation.component.ChatScreen
 import com.example.bluechat.presentation.component.DeviceScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,13 +43,19 @@ class MainActivity : ComponentActivity() {
         get() = bluetoothAdapter?.isEnabled == true
 
     var permissionLauncher: ActivityResultLauncher<Array<String>>? = null
+    var enableBluetoothLauncher: ActivityResultLauncher<Intent>? = null
+//    var enableBluetoothDiscoveryLauncher: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val enableBluetoothLauncher = registerForActivityResult(
+        enableBluetoothLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { /* Not needed */ }
+
+//        enableBluetoothDiscoveryLauncher = registerForActivityResult(
+//            ActivityResultContracts.StartActivityForResult()
+//        ) { /* Not needed */ }
 
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -61,10 +65,15 @@ class MainActivity : ComponentActivity() {
             } else true
 
 //            if(canEnableBluetooth && !isBluetoothEnabled) {
-            enableBluetoothLauncher.launch(
-                Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            )
+//            enableBluetoothLauncher.launch(
+//                Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+//            )
 //            }
+//            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+//            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 500)
+//            enableBluetoothDiscoveryLauncher?.launch(
+//                intent
+//            )
         }
 
         setContent {
@@ -155,6 +164,15 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
             )
         )
+        enableBluetoothLauncher?.launch(
+            Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        )
+
+//        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+//        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 500)
+//        enableBluetoothDiscoveryLauncher?.launch(
+//            intent
+//        )
     }
 }
 
