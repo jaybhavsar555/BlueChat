@@ -109,6 +109,7 @@ class FirstScreenActivity() : ComponentActivity() {
                         )
                         {
                             Text("Start")
+
                         }
 
                     }
