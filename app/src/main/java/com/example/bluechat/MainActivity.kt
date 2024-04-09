@@ -168,23 +168,26 @@ class MainActivity : ComponentActivity() {
 
 
     private fun launcher() {
-        permissionLauncher?.launch(
-            arrayOf(
-                Manifest.permission.BLUETOOTH_SCAN,
-                Manifest.permission.BLUETOOTH_CONNECT,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
+        try {
+            permissionLauncher?.launch(
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
             )
-        )
-        enableBluetoothLauncher?.launch(
-            Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        )
+            enableBluetoothLauncher?.launch(
+                Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            )
 
 //        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
 //        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 500)
 //        enableBluetoothDiscoveryLauncher?.launch(
 //            intent
 //        )
+        } catch (e: Exception) {
+        }
     }
 }
 

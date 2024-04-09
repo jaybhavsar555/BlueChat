@@ -62,9 +62,9 @@ fun AllDeviceScreen(
 //            Button(onClick = onStopScan) {
 //                Text(text = "Stop scan")
 //            }
-//            Button(onClick = onStartServer) {
-//                Text(text = "Start server")
-//            }
+            Button(onClick = onStartServer) {
+                Text(text = "Start Pair")
+            }
         }
     }
 }
@@ -89,17 +89,6 @@ fun BluetoothDeviceList(
         }
     )
 
-//    Box(
-//        modifier = Modifier
-//            .padding(10.dp)
-//            .background(Color.Transparent)
-//            .border(
-//                width = 1.dp, // specify the border width
-//                color = Color.Cyan, // specify the border color
-//                shape = RoundedCornerShape(5.dp)// specify the shape of the border
-//            )
-
-//    ) {
     LazyColumn(
         modifier = modifier
     ) {
@@ -113,27 +102,14 @@ fun BluetoothDeviceList(
         }
         items(pairedDevices) { device ->
             Text(
-                text = device.name ?: "(No name)",
+                text = device.name ?: device.address!!,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onPairDeviceClick(device) }
                     .padding(16.dp)
             )
         }
-//        }
-    }
 
-//    Box(
-//        modifier = Modifier
-//            .padding(10.dp)
-//            .background(Color.Transparent)
-//            .border(
-//                width = 1.dp, // specify the border width
-//                color = Color.Cyan, // specify the border color
-//                shape = RoundedCornerShape(5.dp)// specify the shape of the border
-//            )
-//    ) {
-    LazyColumn(modifier = modifier) {
         item {
             Text(
                 text = "Scanned Devices",
@@ -144,7 +120,7 @@ fun BluetoothDeviceList(
         }
         items(scannedDevices) { device ->
             Text(
-                text = device.name ?: "(No name)",
+                text = device.name ?: device.address!!,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onScanDeviceClick(device) }
@@ -152,6 +128,4 @@ fun BluetoothDeviceList(
             )
         }
     }
-//    }
-
 }
