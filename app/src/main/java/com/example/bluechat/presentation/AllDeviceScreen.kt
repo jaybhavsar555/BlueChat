@@ -43,6 +43,15 @@ fun AllDeviceScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        BluetoothDeviceList(
+            pairedDevices = state.pairedDevices,
+            scannedDevices = state.scannedDevices,
+            onScanDeviceClick = onScannedDeviceClick,
+            onPairDeviceClick = onPairedDeviceClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
@@ -57,16 +66,6 @@ fun AllDeviceScreen(
 //                Text(text = "Start server")
 //            }
         }
-
-        BluetoothDeviceList(
-            pairedDevices = state.pairedDevices,
-            scannedDevices = state.scannedDevices,
-            onScanDeviceClick = onScannedDeviceClick,
-            onPairDeviceClick = onPairedDeviceClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
     }
 }
 
