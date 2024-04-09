@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
+import com.example.bluechat.MainActivity
 import com.example.bluechat.R
 
 
@@ -44,7 +45,8 @@ class FirstScreenActivity() : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth() // Matches parent width
-                        .weight(1f).background(Color.Blue) // Takes half of the available height
+                        .weight(1f)
+                        .background(Color.Blue) // Takes half of the available height
                 ) {
                     // Image content
                     Image(
@@ -58,10 +60,12 @@ class FirstScreenActivity() : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxWidth() // Matches parent width
                         .weight(1f)
-                // Takes half of the available height
+                    // Takes half of the available height
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 1.dp, vertical = 1.dp), // Fills the entire screen
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 1.dp, vertical = 1.dp), // Fills the entire screen
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -78,10 +82,11 @@ class FirstScreenActivity() : ComponentActivity() {
                             fontSize = 20.sp, // Adjust font size as needed
                         )
 
-                        Button(onClick ={
-                            val navigate= Intent(this@FirstScreenActivity,BluetoothOnOffScreenActivity::class.java)
+                        Button(onClick = {
+                            val navigate =
+                                Intent(this@FirstScreenActivity, MainActivity::class.java)
                             startActivity(navigate)
-                            }){
+                        }) {
                             Text("Start")
                         }
 

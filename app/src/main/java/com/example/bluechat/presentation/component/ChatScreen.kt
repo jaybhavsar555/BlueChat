@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.example.bluechat.presentation.components
+package com.example.bluechat.presentation.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.bluechat.domain.chat.BluetoothDevice
 import com.example.bluechat.presentation.BluetoothUiState
+
 @Preview
 @Composable
 fun ChatScreen(

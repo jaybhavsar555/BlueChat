@@ -31,43 +31,42 @@ import androidx.compose.ui.unit.dp
 
 
 data class User(val profilePicture: Any, val username: String)
-@ExperimentalMaterial3Api
-class UserListScreen: ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
+@Composable
+fun UserListScreen() {
 
-            UserList(users = listOf(
-                User(profilePicture = Icons.Filled.Person, username = "Alice"),
-                User(profilePicture = Icons.Filled.Person, username = "Bob"),
-                User(profilePicture = Icons.Filled.Person, username = "Carol"),
-                User(profilePicture = Icons.Filled.Person, username = "Carol"),
-                User(profilePicture = Icons.Filled.Person, username = "Swaraj"),
-                User(profilePicture = Icons.Filled.Person, username = "Vishawjit"),
-                User(profilePicture = Icons.Filled.Person, username = "Mitali"),
-                User(profilePicture = Icons.Filled.Person, username = "Jay"),
-            ))
-        }
-    }
-
-    @Composable
-    fun UserList(users: List<User>) {
-        Column(
-            modifier = Modifier.fillMaxSize()
+    UserList(
+        users = listOf(
+            User(profilePicture = Icons.Filled.Person, username = "Alice"),
+            User(profilePicture = Icons.Filled.Person, username = "Bob"),
+            User(profilePicture = Icons.Filled.Person, username = "Carol"),
+            User(profilePicture = Icons.Filled.Person, username = "Carol"),
+            User(profilePicture = Icons.Filled.Person, username = "Swaraj"),
+            User(profilePicture = Icons.Filled.Person, username = "Vishawjit"),
+            User(profilePicture = Icons.Filled.Person, username = "Mitali"),
+            User(profilePicture = Icons.Filled.Person, username = "Jay"),
         )
-        {
-            for (user in users) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
+    )
+}
+
+
+@Composable
+fun UserList(users: List<User>) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    )
+    {
+        for (user in users) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
+                    Box(
                         modifier = Modifier
                             .size(45.dp)
                             .clip(CircleShape) // Make the box round
@@ -85,8 +84,7 @@ class UserListScreen: ComponentActivity() {
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                        Text(text = user.username, modifier = Modifier.padding(8.dp))
-                    }
+                    Text(text = user.username, modifier = Modifier.padding(8.dp))
                 }
             }
         }

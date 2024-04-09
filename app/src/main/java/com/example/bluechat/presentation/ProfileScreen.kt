@@ -41,139 +41,139 @@ class ProfileScreen: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppBarr()
+//            AppBarr()
 //            AppbarWSwitch()
-            UserProfileEdit()
+//            UserProfileEdit()
 
         }
     }
-    @Composable
-    fun AppBarr(){
-        Scaffold(
-            topBar = {
-
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFF96B3ED),
-                        titleContentColor = Color(0xFF4D87F9),
-                    ),
-                    title ={
-                        Text("BlueChat")
-                    }
-                )
-            },
-        ) {
-        }
-    }
-    @Composable
-    fun BluetoothSwitchButton(){
-        val mCheckedState = remember{ mutableStateOf(false)}
-
-        Switch(
-            checked = mCheckedState.value,
-            onCheckedChange = {
-                mCheckedState.value = it
-                if(it){
+//    @Composable
+//    fun AppBarr(){
+//        Scaffold(
+//            topBar = {
 //
-                }
-                else{
-                    null
-                }
-
-            },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color(0xFF96B3ED),
-                uncheckedThumbColor = Color(0xFF96B3ED),
-                checkedTrackColor = Color(0xFFFFFFFF),
-                uncheckedTrackColor = Color(0xFFFFFFFF)
-
-            ),
-        )
-    }
-
-    @Composable
-    fun AppbarWSwitch(){
-        Scaffold(
-            topBar = {
-
-                TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFF96B3ED),
-                        titleContentColor = Color(0xFF4D87F9),
-                    ),
-                    title ={
-                        Text("BlueChat")
-                    },
-                    actions = {
-//                        BluetoothSwitchButton()
-
-                    }
-                )
-            },
-        ){
-        }
-
-    }
-
-    @Composable
-    fun UserProfileEdit() {
-        Scaffold {
-            Surface() {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(30.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Profile picture section
-                    Box(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .clip(CircleShape) // Make the box round
-                            .clickable {
-                                /* Handle profile picture upload click here */
-                            }
-                            .border(
-                                BorderStroke(width = 1.dp, color = Color(0xFF96B3ED)),
-                                shape = CircleShape
-                            )
-                    ) {
-
-                        // Add an icon or placeholder text inside the box
-//                    Icon(
-//                        Icons.Filled.Person
-//                        contentDescription = "Profile Picture",
-//                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
-//                    ) // Adjust alpha for semi-transparent icon
-                    }
-                    Spacer(modifier = Modifier.height(16.dp)) // Add some spacing
-
-                    // Username text area
-                    OutlinedTextField(
-                        value = "Enter your username", // Initial text
-                        onValueChange = { /* Update username state here */ },
-                        modifier = Modifier.fillMaxWidth(),
-                        label = { Text("Username") },
-                        maxLines = 1 // Set single line for username
-                    )
-                    Button(
-
-                        onClick = {
-                            //handle the Updated Image and Device Name
-
-                            /**after successfully Updated it will Show The Toast and navigate to the
-                             * ConnectToService Screen
-                             */
-                            val vintent =
-                                Intent(this@ProfileScreen, ConnectToDeviceScreen::class.java);
-                            startActivity(vintent);
-                        }
-                    ) {
-                        Text("Submit")
-                    }
-
-                }
-            }
-        }
-    }
+//                TopAppBar(
+//                    colors = TopAppBarDefaults.topAppBarColors(
+//                        containerColor = Color(0xFF96B3ED),
+//                        titleContentColor = Color(0xFF4D87F9),
+//                    ),
+//                    title ={
+//                        Text("BlueChat")
+//                    }
+//                )
+//            },
+//        ) {
+//        }
+//    }
+//    @Composable
+//    fun BluetoothSwitchButton(){
+//        val mCheckedState = remember{ mutableStateOf(false)}
+//
+//        Switch(
+//            checked = mCheckedState.value,
+//            onCheckedChange = {
+//                mCheckedState.value = it
+//                if(it){
+////
+//                }
+//                else{
+//                    null
+//                }
+//
+//            },
+//            colors = SwitchDefaults.colors(
+//                checkedThumbColor = Color(0xFF96B3ED),
+//                uncheckedThumbColor = Color(0xFF96B3ED),
+//                checkedTrackColor = Color(0xFFFFFFFF),
+//                uncheckedTrackColor = Color(0xFFFFFFFF)
+//
+//            ),
+//        )
+//    }
+//
+//    @Composable
+//    fun AppbarWSwitch(){
+//        Scaffold(
+//            topBar = {
+//
+//                TopAppBar(
+//                    colors = TopAppBarDefaults.topAppBarColors(
+//                        containerColor = Color(0xFF96B3ED),
+//                        titleContentColor = Color(0xFF4D87F9),
+//                    ),
+//                    title ={
+//                        Text("BlueChat")
+//                    },
+//                    actions = {
+////                        BluetoothSwitchButton()
+//
+//                    }
+//                )
+//            },
+//        ){
+//        }
+//
+//    }
+//
+//    @Composable
+//    fun UserProfileEdit() {
+//        Scaffold {
+//            Surface() {
+//                Column(
+//                    modifier = Modifier.fillMaxSize().padding(30.dp),
+//                    verticalArrangement = Arrangement.Center,
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    // Profile picture section
+//                    Box(
+//                        modifier = Modifier
+//                            .size(200.dp)
+//                            .clip(CircleShape) // Make the box round
+//                            .clickable {
+//                                /* Handle profile picture upload click here */
+//                            }
+//                            .border(
+//                                BorderStroke(width = 1.dp, color = Color(0xFF96B3ED)),
+//                                shape = CircleShape
+//                            )
+//                    ) {
+//
+//                        // Add an icon or placeholder text inside the box
+////                    Icon(
+////                        Icons.Filled.Person
+////                        contentDescription = "Profile Picture",
+////                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+////                    ) // Adjust alpha for semi-transparent icon
+//                    }
+//                    Spacer(modifier = Modifier.height(16.dp)) // Add some spacing
+//
+//                    // Username text area
+//                    OutlinedTextField(
+//                        value = "Enter your username", // Initial text
+//                        onValueChange = { /* Update username state here */ },
+//                        modifier = Modifier.fillMaxWidth(),
+//                        label = { Text("Username") },
+//                        maxLines = 1 // Set single line for username
+//                    )
+//                    Button(
+//
+//                        onClick = {
+//                            //handle the Updated Image and Device Name
+//
+//                            /**after successfully Updated it will Show The Toast and navigate to the
+//                             * ConnectToService Screen
+//                             */
+//                            val vintent =
+//                                Intent(this@ProfileScreen, ConnectToDeviceScreen::class.java);
+//                            startActivity(vintent);
+//                        }
+//                    ) {
+//                        Text("Submit")
+//                    }
+//
+//                }
+//            }
+//        }
+//    }
 
 }

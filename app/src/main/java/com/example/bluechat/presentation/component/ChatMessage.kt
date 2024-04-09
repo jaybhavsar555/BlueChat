@@ -1,4 +1,4 @@
-package com.example.bluechat.presentation.components
+package com.example.bluechat.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
