@@ -89,69 +89,69 @@ fun BluetoothDeviceList(
         }
     )
 
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-            .background(Color.Transparent)
-            .border(
-                width = 1.dp, // specify the border width
-                color = Color.Cyan, // specify the border color
-                shape = RoundedCornerShape(5.dp)// specify the shape of the border
-            )
+//    Box(
+//        modifier = Modifier
+//            .padding(10.dp)
+//            .background(Color.Transparent)
+//            .border(
+//                width = 1.dp, // specify the border width
+//                color = Color.Cyan, // specify the border color
+//                shape = RoundedCornerShape(5.dp)// specify the shape of the border
+//            )
 
+//    ) {
+    LazyColumn(
+        modifier = modifier
     ) {
-        LazyColumn(
-            modifier = modifier
-        ) {
-            item {
-                Text(
-                    text = "Paired Devices",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            items(pairedDevices) { device ->
-                Text(
-                    text = device.name ?: "(No name)",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onPairDeviceClick(device) }
-                        .padding(16.dp)
-                )
-            }
+        item {
+            Text(
+                text = "Paired Devices",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(16.dp)
+            )
         }
+        items(pairedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onPairDeviceClick(device) }
+                    .padding(16.dp)
+            )
+        }
+//        }
     }
 
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-            .background(Color.Transparent)
-            .border(
-                width = 1.dp, // specify the border width
-                color = Color.Cyan, // specify the border color
-                shape = RoundedCornerShape(5.dp)// specify the shape of the border
+//    Box(
+//        modifier = Modifier
+//            .padding(10.dp)
+//            .background(Color.Transparent)
+//            .border(
+//                width = 1.dp, // specify the border width
+//                color = Color.Cyan, // specify the border color
+//                shape = RoundedCornerShape(5.dp)// specify the shape of the border
+//            )
+//    ) {
+    LazyColumn(modifier = modifier) {
+        item {
+            Text(
+                text = "Scanned Devices",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(16.dp)
             )
-    ) {
-        LazyColumn(modifier = modifier) {
-            item {
-                Text(
-                    text = "Scanned Devices",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            items(scannedDevices) { device ->
-                Text(
-                    text = device.name ?: "(No name)",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onScanDeviceClick(device) }
-                        .padding(16.dp)
-                )
-            }
+        }
+        items(scannedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onScanDeviceClick(device) }
+                    .padding(16.dp)
+            )
         }
     }
+//    }
 
 }
