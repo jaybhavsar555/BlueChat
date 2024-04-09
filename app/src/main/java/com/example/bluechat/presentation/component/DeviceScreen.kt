@@ -20,7 +20,8 @@ fun DeviceScreen(
     onStartScan: () -> Unit,
     onStopScan: () -> Unit,
     onStartServer: () -> Unit,
-    onDeviceClick: (BluetoothDevice) -> Unit
+    onScannedDeviceClick: (BluetoothDevice) -> Unit,
+    onPairedDeviceClick: (BluetoothDevice) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -29,7 +30,8 @@ fun DeviceScreen(
         BluetoothDeviceList(
             pairedDevices = state.pairedDevices,
             scannedDevices = state.scannedDevices,
-            onClick = onDeviceClick,
+            onScanDeviceClick = onScannedDeviceClick,
+            onPairDeviceClick = onPairedDeviceClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -55,7 +57,8 @@ fun DeviceScreen(
 fun BluetoothDeviceList(
     pairedDevices: List<BluetoothDevice>,
     scannedDevices: List<BluetoothDevice>,
-    onClick: (BluetoothDevice) -> Unit,
+    onScanDeviceClick: (BluetoothDevice) -> Unit,
+    onPairDeviceClick: (BluetoothDevice) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -74,7 +77,7 @@ fun BluetoothDeviceList(
                 text = device.name ?: "(No name)",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onClick(device) }
+                    .clickable { onPairDeviceClick(device) }
                     .padding(16.dp)
             )
         }
@@ -92,7 +95,7 @@ fun BluetoothDeviceList(
                 text = device.name ?: "(No name)",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onClick(device) }
+                    .clickable { onScanDeviceClick(device) }
                     .padding(16.dp)
             )
         }

@@ -24,8 +24,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.bluechat.presentation.AllDeviceScreen
 import com.example.bluechat.presentation.BluetoothOnOffScreen
 import com.example.bluechat.presentation.BluetoothViewModel
+import com.example.bluechat.presentation.UserListScreen
 import com.example.bluechat.presentation.component.ChatScreen
 import com.example.bluechat.presentation.component.DeviceScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -126,25 +128,35 @@ class MainActivity : ComponentActivity() {
 
                     state.isOn -> {
                         launcher()
-                        DeviceScreen(
+                        AllDeviceScreen(
                             state = state,
                             onStartScan = viewModel::startScan,
                             onStopScan = viewModel::stopScan,
-                            onDeviceClick = viewModel::connectToDevice,
+                            onScannedDeviceClick = viewModel::connectToDevice,
+                            onPairedDeviceClick = viewModel::addDeviceToChatList,
                             onStartServer = viewModel::waitForIncomingConnections
                         )
 
+                    }
+
+                    state.isDeviceAddedToChatList -> {
+                        UserListScreen(
+                            state = state,
+                            onStartChatClick = viewModel::waitForIncomingConnections,
+                            onListenChatClick = viewModel::connectToDevice
+                        )
                     }
 
                     else -> {
                         if (!isBluetoothEnabled) {
                             BluetoothOnOffScreen(onOnOffClick = viewModel::handleOnOff)
                         } else {
-                            DeviceScreen(
+                            AllDeviceScreen(
                                 state = state,
                                 onStartScan = viewModel::startScan,
                                 onStopScan = viewModel::stopScan,
-                                onDeviceClick = viewModel::connectToDevice,
+                                onScannedDeviceClick = viewModel::connectToDevice,
+                                onPairedDeviceClick = viewModel::addDeviceToChatList,
                                 onStartServer = viewModel::waitForIncomingConnections
                             )
                         }

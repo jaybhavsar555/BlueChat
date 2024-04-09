@@ -2,7 +2,9 @@ package com.example.bluechat.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bluechat.data.chat.toBluetoothDeviceDomain
 import com.example.bluechat.domain.chat.BluetoothController
+import com.example.bluechat.domain.chat.BluetoothDevice
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
 import com.example.bluechat.domain.chat.ConnectionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,11 +18,13 @@ class BluetoothViewModel @Inject constructor(
     private val bluetoothController: BluetoothController
 ) : ViewModel() {
 
+    private val chatListDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+
     private val _state = MutableStateFlow(BluetoothUiState())
     val state = combine(
         bluetoothController.scannedDevices,
         bluetoothController.pairedDevices,
-        _state
+        _state,
     ) { scannedDevices, pairedDevices, state ->
         state.copy(
             scannedDevices = scannedDevices,
@@ -50,6 +54,17 @@ class BluetoothViewModel @Inject constructor(
         deviceConnectionJob = bluetoothController
             .connectToDevice(device)
             .listen()
+    }
+
+    fun addDeviceToChatList(newDevice: BluetoothDevice) {
+        _state.update {
+            if (newDevice in it.chatListDevices) it else it.copy(
+                chatListDevices = it.chatListDevices.plusElement(
+                    newDevice
+                )
+            )
+        }
+        _state.update { it.copy(isDeviceAddedToChatList = true) }
     }
 
     fun disconnectFromDevice() {
@@ -143,7 +158,7 @@ class BluetoothViewModel @Inject constructor(
     }
 
     fun handleOnOff(isOn: Boolean) {
-        if(isOn)
+        if (isOn)
             _state.update { it.copy(isOn = true) }
     }
 }
