@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
@@ -43,21 +44,42 @@ fun UserListScreen(
     onStartChatClick: () -> Unit,
     onListenChatClick: (BluetoothDevice) -> Unit,
 ) {
+    UserListAppBarr(
+        state = state,
+        onStartChatClick = onStartChatClick,
+        onListenChatClick = onListenChatClick
+    )
+}
 
-//    TopAppBar(
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = Color(0xFF96B3ED),
-//            titleContentColor = Color(0xFF4D87F9),
-//        ),
-//        title = {
-//            Text("BlueChat")
-//        }
-//    )
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserListAppBarr(
+    state: BluetoothUiState,
+    onStartChatClick: () -> Unit,
+    onListenChatClick: (BluetoothDevice) -> Unit,
+) {
+    Scaffold(
+        topBar = {
 
-    UserList(
-        users = state.chatListDevices,
-        onStartClick = onStartChatClick,
-        onListenClick = onListenChatClick
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF96B3ED),
+                    titleContentColor = Color(0xFF4D87F9),
+                ),
+                title = {
+                    Text("BlueChat")
+                }
+            )
+        }, content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                UserList(
+                    users = state.chatListDevices,
+                    onStartClick = onStartChatClick,
+                    onListenClick = onListenChatClick
 //        listOf(
 //            User(profilePicture = Icons.Filled.Person, username = "Alice"),
 //            User(profilePicture = Icons.Filled.Person, username = "Bob"),
@@ -68,6 +90,9 @@ fun UserListScreen(
 //            User(profilePicture = Icons.Filled.Person, username = "Mitali"),
 //            User(profilePicture = Icons.Filled.Person, username = "Jay"),
 //        )
+                )
+            }
+        }
     )
 }
 
