@@ -61,20 +61,23 @@ fun AllDeviceScreen(
         ) {
             Button(
                 onClick = onStartScan,
-                modifier = Modifier.fillMaxWidth(0.5f),
+//                modifier = Modifier.fillMaxWidth(0.5f),
                 colors = ButtonDefaults.buttonColors(customBlue)
             ) {
-                Text(text = "Start scan")
+                Text(text = "Start scan",
+                    color = Color.White
+                    )
             }
 //            Button(onClick = onStopScan) {
 //                Text(text = "Stop scan")
 //            }
             Button(
                 onClick = onStartServer,
-                modifier = Modifier.fillMaxWidth(0.5f),
+//                modifier = Modifier.fillMaxWidth(0.5f),
                 colors = ButtonDefaults.buttonColors(customBlue)
             ) {
-                Text(text = "Start Pair")
+                Text(text = "Start Pair",
+                    color = Color.White)
             }
         }
     }
@@ -97,7 +100,9 @@ fun BluetoothDeviceList(
             titleContentColor = Color(0xFF4D87F9),
         ),
         title = {
-            androidx.compose.material3.Text("BlueChat")
+            androidx.compose.material3.Text("BlueChat",
+                fontWeight = FontWeight.Bold
+                )
         }
     )
 

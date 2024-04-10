@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,7 +83,9 @@ fun AppBarr(onOnOffClick: (Boolean) -> Unit) {
                     titleContentColor = Color(0xFF4D87F9),
                 ),
                 title = {
-                    Text("BlueChat")
+                    Text("BlueChat",
+                        fontWeight = FontWeight.Bold
+                        )
                 }
             )
         }, content = { innerPadding ->

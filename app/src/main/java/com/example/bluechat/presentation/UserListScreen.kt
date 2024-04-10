@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -31,7 +33,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.bluechat.domain.chat.BluetoothDevice
 
 
@@ -67,7 +71,8 @@ fun UserListAppBarr(
                     titleContentColor = Color(0xFF4D87F9),
                 ),
                 title = {
-                    Text("BlueChat")
+                    Text("BlueChat",
+                        fontWeight = FontWeight.Bold)
                 }
             )
         }, content = { innerPadding ->
@@ -109,8 +114,10 @@ fun UserList(
     {
         for (user in users) {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.
+                    height(75.dp)
+                    .fillMaxWidth().
+                        background(Color.Transparent)
                     .padding(8.dp),
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
@@ -120,7 +127,7 @@ fun UserList(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(45.dp)
+                            .size(65.dp)
                             .clip(CircleShape) // Make the box round
                             .clickable {
                                 /* Handle profile picture upload click here */
@@ -136,7 +143,7 @@ fun UserList(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    Text(text = user.name ?: "User", modifier = Modifier.padding(8.dp))
+                    Text(text = user.name ?: "User", modifier = Modifier.padding(8.dp), fontSize = 13.sp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
