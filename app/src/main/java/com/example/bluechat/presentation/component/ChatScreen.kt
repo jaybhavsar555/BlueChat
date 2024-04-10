@@ -7,12 +7,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -25,12 +30,25 @@ import com.example.bluechat.presentation.BluetoothUiState
 
 @Preview
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun ChatScreen(
     state: BluetoothUiState,
     onDisconnect: () -> Unit,
     onSendMessage: (String) -> Unit
 
 ) {
+
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFF96B3ED),
+            titleContentColor = Color(0xFF4D87F9),
+        ),
+        title = {
+            androidx.compose.material3.Text("BlueChat")
+        }
+    )
+
+
     val message = rememberSaveable {
         mutableStateOf("")
     }

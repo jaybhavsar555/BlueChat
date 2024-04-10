@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -78,6 +79,7 @@ fun BluetoothDeviceList(
     onPairDeviceClick: (BluetoothDevice) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
 
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
