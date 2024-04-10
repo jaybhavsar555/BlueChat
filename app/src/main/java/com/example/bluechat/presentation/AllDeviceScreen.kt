@@ -13,8 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
+import androidx.compose.material3.Button
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -40,6 +41,7 @@ fun AllDeviceScreen(
     onScannedDeviceClick: (BluetoothDevice) -> Unit,
     onPairedDeviceClick: (BluetoothDevice) -> Unit
 ) {
+    val customBlue = Color(0xFF4D87F9)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,13 +59,21 @@ fun AllDeviceScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Button(onClick = onStartScan) {
+            Button(
+                onClick = onStartScan,
+                modifier = Modifier.fillMaxWidth(0.5f),
+                colors = ButtonDefaults.buttonColors(customBlue)
+            ) {
                 Text(text = "Start scan")
             }
 //            Button(onClick = onStopScan) {
 //                Text(text = "Stop scan")
 //            }
-            Button(onClick = onStartServer) {
+            Button(
+                onClick = onStartServer,
+                modifier = Modifier.fillMaxWidth(0.5f),
+                colors = ButtonDefaults.buttonColors(customBlue)
+            ) {
                 Text(text = "Start Pair")
             }
         }
