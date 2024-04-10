@@ -143,7 +143,7 @@ fun UserList(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    Text(text = user.name ?: "User", modifier = Modifier.padding(8.dp), fontSize = 13.sp))
+                    Text(text = user.name ?: "User", modifier = Modifier.padding(8.dp), fontSize = 13.sp)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
