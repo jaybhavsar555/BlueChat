@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bluechat.presentation.AllDeviceScreen
 import com.example.bluechat.presentation.BluetoothOnOffScreen
 import com.example.bluechat.presentation.BluetoothViewModel
+import com.example.bluechat.presentation.ProfileScreen
 import com.example.bluechat.presentation.UserListScreen
 import com.example.bluechat.presentation.component.ChatScreen
 import com.example.bluechat.presentation.component.DeviceScreen
@@ -122,7 +124,8 @@ class MainActivity : ComponentActivity() {
                         ChatScreen(
                             state = state,
                             onDisconnect = viewModel::disconnectFromDevice,
-                            onSendMessage = viewModel::sendMessage
+                            onSendMessage = viewModel::sendMessage,
+                            onSingleBackupClick = viewModel::handleSingleBackupClick
                         )
                     }
 
@@ -139,11 +142,30 @@ class MainActivity : ComponentActivity() {
 
                     }
 
+                    state.openProfileScreen -> {
+                        ProfileScreen(onSubmitProfileData = viewModel::saveProfileData)
+                    }
+
+                    state.openAllDeviceScreen -> {
+                        AllDeviceScreen(
+                            state = state,
+                            onStartScan = viewModel::startScan,
+                            onStopScan = viewModel::stopScan,
+                            onScannedDeviceClick = viewModel::connectToDevice,
+                            onPairedDeviceClick = viewModel::addDeviceToChatList,
+                            onStartServer = viewModel::waitForIncomingConnections
+                        )
+                    }
+
                     state.isDeviceAddedToChatList -> {
                         UserListScreen(
                             state = state,
                             onStartChatClick = viewModel::waitForIncomingConnections,
-                            onListenChatClick = viewModel::connectToDevice
+                            onListenChatClick = viewModel::connectToDevice,
+                            onProfileClick = viewModel::handleProfileClick,
+                            onGotoAllDevicesClick = viewModel::handleGoToAllDevicesClick,
+                            onGeneralBackupClick = viewModel::handleGeneralBackupClick,
+                            profileData = viewModel::getSavedProfileDataFromPrefs
                         )
                     }
 

@@ -13,4 +13,6 @@ data class BluetoothUiState(
     val isOn: Boolean = false,
     val chatListDevices: List<BluetoothDevice> = emptyList(),
     val isDeviceAddedToChatList: Boolean = false,
+    val openProfileScreen: Boolean = false,
+    val openAllDeviceScreen: Boolean = false
 )

@@ -14,9 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bluechat.domain.chat.BluetoothMessage
-import com.example.bluechat.ui.theme.BlueChatTheme
-import com.example.bluechat.ui.theme.OldRose
-import com.example.bluechat.ui.theme.Vanilla
+import com.example.bluechat.utils.theme.BlueChatTheme
+import com.example.bluechat.utils.theme.OldRose
+import com.example.bluechat.utils.theme.Vanilla
 
 @Composable
 fun ChatMessage(
@@ -59,7 +59,7 @@ fun ChatMessagePreview() {
             message = BluetoothMessage(
                 message = "Hello World!",
                 senderName = "Pixel 6",
-                isFromLocalUser = false
+                isFromLocalUser = false,
             )
         )
     }

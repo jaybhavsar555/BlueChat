@@ -1,5 +1,6 @@
 package com.example.bluechat.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bluechat.data.chat.toBluetoothDeviceDomain
@@ -7,6 +8,7 @@ import com.example.bluechat.domain.chat.BluetoothController
 import com.example.bluechat.domain.chat.BluetoothDevice
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
 import com.example.bluechat.domain.chat.ConnectionResult
+import com.example.bluechat.utils.prefs.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
-    private val bluetoothController: BluetoothController
+    private val bluetoothController: BluetoothController,
+    private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
     private val chatListDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
@@ -125,6 +128,10 @@ class BluetoothViewModel @Inject constructor(
                             messages = it.messages + result.message
                         )
                     }
+                    val senderMessages = _state.value.messages.filter { !it.isFromLocalUser }
+                    sharedPreferencesManager.saveString(
+                        SharedPreferencesManager.SENDERNAME, senderMessages.last().senderName
+                    )
                 }
 
                 is ConnectionResult.Error -> {
@@ -154,11 +161,36 @@ class BluetoothViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        bluetoothController.release()
+//        bluetoothController.release()
+    }
+
+    fun saveProfileData(userData: String) {
+        sharedPreferencesManager.saveString(SharedPreferencesManager.USERNAME, userData)
     }
 
     fun handleOnOff(isOn: Boolean) {
         if (isOn)
             _state.update { it.copy(isOn = true) }
+    }
+
+    fun handleProfileClick() {
+        _state.update { it.copy(openProfileScreen = true) }
+        Log.d("abhi", "click : ${state.value.openProfileScreen}")
+    }
+
+    fun handleGoToAllDevicesClick() {
+        _state.update { it.copy(openAllDeviceScreen = true) }
+    }
+
+    fun handleGeneralBackupClick() {
+
+    }
+
+    fun handleSingleBackupClick() {
+
+    }
+
+    fun getSavedProfileDataFromPrefs(): String {
+        return sharedPreferencesManager.getString(SharedPreferencesManager.SENDERNAME)
     }
 }

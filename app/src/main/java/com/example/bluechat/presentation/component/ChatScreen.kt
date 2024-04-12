@@ -2,6 +2,7 @@
 
 package com.example.bluechat.presentation.component
 
+import android.provider.ContactsContract.Profile
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,6 +30,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bluechat.presentation.BluetoothUiState
+import com.example.bluechat.presentation.DevicesList
+import com.example.bluechat.presentation.ProfileScreen
 
 @Preview
 @Composable
@@ -34,26 +39,62 @@ import com.example.bluechat.presentation.BluetoothUiState
 fun ChatScreen(
     state: BluetoothUiState,
     onDisconnect: () -> Unit,
-    onSendMessage: (String) -> Unit
-
+    onSendMessage: (String) -> Unit,
+    onSingleBackupClick: () -> Unit
 ) {
-
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF96B3ED),
-            titleContentColor = Color(0xFF4D87F9),
-        ),
-        title = {
-            androidx.compose.material3.Text("BlueChat")
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF96B3ED),
+                    titleContentColor = Color(0xFF4D87F9),
+                ),
+                title = {
+                    androidx.compose.material3.Text("BlueChat")
+                },
+                actions = {
+                    IconButton(onClick = onDisconnect) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Disconnect"
+                        )
+                    }
+                    androidx.compose.material3.IconButton(
+                        onClick = onSingleBackupClick
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "more options",
+                        )
+                    }
+                }
+            )
+        }, content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                ChatScreenWindow(
+                    state = state,
+                    onDisconnect = onDisconnect,
+                    onSendMessage = onSendMessage
+                )
+            }
         }
     )
+}
 
-
+@Composable
+fun ChatScreenWindow(
+    state: BluetoothUiState,
+    onDisconnect: () -> Unit,
+    onSendMessage: (String) -> Unit
+) {
     val message = rememberSaveable {
         mutableStateOf("")
     }
     val keyboardController = LocalSoftwareKeyboardController.current
-
 
     Column(
         modifier = Modifier
@@ -69,12 +110,12 @@ fun ChatScreen(
                 text = "message",
                 modifier = Modifier.weight(1f)
             )
-            IconButton(onClick = onDisconnect) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Disconnect"
-                )
-            }
+//            IconButton(onClick = onDisconnect) {
+//                Icon(
+//                    imageVector = Icons.Default.Close,
+//                    contentDescription = "Disconnect"
+//                )
+//            }
         }
         LazyColumn(
             modifier = Modifier
@@ -91,7 +132,7 @@ fun ChatScreen(
                         message = message,
                         modifier = Modifier
                             .align(
-                                if(message.isFromLocalUser) Alignment.End else Alignment.Start
+                                if (message.isFromLocalUser) Alignment.End else Alignment.Start
                             )
                     )
                 }

@@ -1,4 +1,4 @@
-package com.example.bluechat.ui.theme
+package com.example.bluechat.utils.theme
 
 import androidx.compose.ui.graphics.Color
 

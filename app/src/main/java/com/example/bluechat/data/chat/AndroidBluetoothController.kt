@@ -14,6 +14,7 @@ import com.example.bluechat.domain.chat.BluetoothController
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
 import com.example.bluechat.domain.chat.BluetoothMessage
 import com.example.bluechat.domain.chat.ConnectionResult
+import com.example.bluechat.utils.prefs.SharedPreferencesManager
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,9 @@ import java.util.*
 
 @SuppressLint("MissingPermission")
 class AndroidBluetoothController(
-    private val context: Context
-): BluetoothController {
+    private val context: Context,
+    private val sharedPreferencesManager: SharedPreferencesManager
+) : BluetoothController {
 
     private val bluetoothManager by lazy {
         context.getSystemService(BluetoothManager::class.java)
@@ -55,12 +57,12 @@ class AndroidBluetoothController(
     private val foundDeviceReceiver = FoundDeviceReceiver { device ->
         _scannedDevices.update { devices ->
             val newDevice = device.toBluetoothDeviceDomain()
-            if(newDevice in devices) devices else devices.plusElement(newDevice)
+            if (newDevice in devices) devices else devices.plusElement(newDevice)
         }
     }
 
     private val bluetoothStateReceiver = BluetoothStateReceiver { isConnected, bluetoothDevice ->
-        if(bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == true) {
+        if (bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == true) {
             _isConnected.update { isConnected }
         } else {
             CoroutineScope(Dispatchers.IO).launch {
@@ -119,10 +121,10 @@ class AndroidBluetoothController(
             )
 
             var shouldLoop = true
-            while(shouldLoop) {
+            while (shouldLoop) {
                 currentClientSocket = try {
                     currentServerSocket?.accept()
-                } catch(e: IOException) {
+                } catch (e: IOException) {
                     shouldLoop = false
                     null
                 }
@@ -171,7 +173,7 @@ class AndroidBluetoothController(
                                 .map { ConnectionResult.TransferSucceeded(it) }
                         )
                     }
-                } catch(e: IOException) {
+                } catch (e: IOException) {
                     socket.close()
                     currentClientSocket = null
                     emit(ConnectionResult.Error("Connection was interrupted"))
@@ -187,13 +189,16 @@ class AndroidBluetoothController(
 //            return null
 //        }
 
-        if(dataTransferService == null) {
+        if (dataTransferService == null) {
             return null
         }
 
         val bluetoothMessage = BluetoothMessage(
             message = message,
-            senderName = bluetoothAdapter?.name ?: "Unknown name",
+            senderName = sharedPreferencesManager.getString(
+                SharedPreferencesManager.USERNAME,
+                bluetoothAdapter?.name ?: "Unknown name"
+            ),
             isFromLocalUser = true
         )
 
@@ -212,7 +217,7 @@ class AndroidBluetoothController(
     override fun release() {
 //        context.unregisterReceiver(foundDeviceReceiver)
 //        context.unregisterReceiver(bluetoothStateReceiver)
-        closeConnection()
+//        closeConnection()
     }
 
     private fun updatePairedDevices() {

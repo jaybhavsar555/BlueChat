@@ -22,9 +22,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -43,11 +45,19 @@ fun UserListScreen(
     state: BluetoothUiState,
     onStartChatClick: () -> Unit,
     onListenChatClick: (BluetoothDevice) -> Unit,
+    onProfileClick: () -> Unit,
+    onGotoAllDevicesClick: () -> Unit,
+    onGeneralBackupClick: () -> Unit,
+    profileData: () -> String
 ) {
     UserListAppBarr(
         state = state,
         onStartChatClick = onStartChatClick,
-        onListenChatClick = onListenChatClick
+        onListenChatClick = onListenChatClick,
+        onProfileClick = onProfileClick,
+        onGotoAllDevicesClick = onGotoAllDevicesClick,
+        onGeneralBackupClick = onGeneralBackupClick,
+        profileData = profileData
     )
 }
 
@@ -57,6 +67,10 @@ fun UserListAppBarr(
     state: BluetoothUiState,
     onStartChatClick: () -> Unit,
     onListenChatClick: (BluetoothDevice) -> Unit,
+    onProfileClick: () -> Unit,
+    onGotoAllDevicesClick: () -> Unit,
+    onGeneralBackupClick: () -> Unit,
+    profileData: () -> String
 ) {
     Scaffold(
         topBar = {
@@ -68,6 +82,14 @@ fun UserListAppBarr(
                 ),
                 title = {
                     Text("BlueChat")
+                },
+                actions = {
+                    IconButton(onClick = onProfileClick) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "more options",
+                        )
+                    }
                 }
             )
         }, content = { innerPadding ->
@@ -77,9 +99,10 @@ fun UserListAppBarr(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 UserList(
-                    users = state.chatListDevices,
+                    state = state,
                     onStartClick = onStartChatClick,
-                    onListenClick = onListenChatClick
+                    onListenClick = onListenChatClick,
+                    profileData = profileData
 //        listOf(
 //            User(profilePicture = Icons.Filled.Person, username = "Alice"),
 //            User(profilePicture = Icons.Filled.Person, username = "Bob"),
@@ -99,15 +122,16 @@ fun UserListAppBarr(
 
 @Composable
 fun UserList(
-    users: List<BluetoothDevice>,
+    state: BluetoothUiState,
     onStartClick: () -> Unit,
     onListenClick: (BluetoothDevice) -> Unit,
+    profileData: () -> String
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     )
     {
-        for (user in users) {
+        for (user in state.chatListDevices) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,7 +160,7 @@ fun UserList(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    Text(text = user.name ?: "User", modifier = Modifier.padding(8.dp))
+                    Text(text = profileData() ?: "User", modifier = Modifier.padding(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
