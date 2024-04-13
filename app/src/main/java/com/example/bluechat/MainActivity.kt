@@ -143,7 +143,9 @@ class MainActivity : ComponentActivity() {
                     }
 
                     state.openProfileScreen -> {
-                        ProfileScreen(onSubmitProfileData = viewModel::saveProfileData)
+                        ProfileScreen(
+                            profileData = viewModel::getSavedUserProfileDataFromPrefs,
+                            onSubmitProfileData = viewModel::saveProfileData)
                     }
 
                     state.openAllDeviceScreen -> {
@@ -165,7 +167,7 @@ class MainActivity : ComponentActivity() {
                             onProfileClick = viewModel::handleProfileClick,
                             onGotoAllDevicesClick = viewModel::handleGoToAllDevicesClick,
                             onGeneralBackupClick = viewModel::handleGeneralBackupClick,
-                            profileData = viewModel::getSavedProfileDataFromPrefs
+                            profileData = viewModel::getSavedSenderProfileDataFromPrefs
                         )
                     }
 

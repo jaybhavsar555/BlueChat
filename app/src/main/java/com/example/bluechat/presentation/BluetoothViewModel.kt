@@ -22,6 +22,7 @@ class BluetoothViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val chatListDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+    private var deviceAddress: String = ""
 
     private val _state = MutableStateFlow(BluetoothUiState())
     val state = combine(
@@ -130,7 +131,8 @@ class BluetoothViewModel @Inject constructor(
                     }
                     val senderMessages = _state.value.messages.filter { !it.isFromLocalUser }
                     sharedPreferencesManager.saveString(
-                        SharedPreferencesManager.SENDERNAME, senderMessages.last().senderName
+                        "${SharedPreferencesManager.SENDERNAME}_$deviceAddress",
+                        senderMessages.last().senderName
                     )
                 }
 
@@ -190,7 +192,15 @@ class BluetoothViewModel @Inject constructor(
 
     }
 
-    fun getSavedProfileDataFromPrefs(): String {
-        return sharedPreferencesManager.getString(SharedPreferencesManager.SENDERNAME)
+    fun getSavedSenderProfileDataFromPrefs(device: BluetoothDevice): String {
+        device.address?.let { deviceAddress = it }
+        return sharedPreferencesManager.getString(
+            "${SharedPreferencesManager.SENDERNAME}_$deviceAddress",
+            device.name ?: "User"
+        )
+    }
+
+    fun getSavedUserProfileDataFromPrefs(): String {
+        return sharedPreferencesManager.getString(SharedPreferencesManager.USERNAME)
     }
 }

@@ -46,14 +46,21 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun ProfileScreen(
+    profileData: () -> String,
     onSubmitProfileData: (String) -> Unit
 ) {
-    ProfileScreenAppBarr(onSubmitProfileData = onSubmitProfileData)
+    ProfileScreenAppBarr(
+        profileData = profileData,
+        onSubmitProfileData = onSubmitProfileData
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreenAppBarr(onSubmitProfileData: (String) -> Unit) {
+fun ProfileScreenAppBarr(
+    profileData: () -> String,
+    onSubmitProfileData: (String) -> Unit
+) {
     Scaffold(
         topBar = {
 
@@ -72,7 +79,10 @@ fun ProfileScreenAppBarr(onSubmitProfileData: (String) -> Unit) {
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                UserProfileEdit(onSubmitProfileData = onSubmitProfileData)
+                UserProfileEdit(
+                    profileData = profileData,
+                    onSubmitProfileData = onSubmitProfileData
+                )
             }
         }
     )
@@ -80,10 +90,11 @@ fun ProfileScreenAppBarr(onSubmitProfileData: (String) -> Unit) {
 
 @Composable
 fun UserProfileEdit(
+    profileData: () -> String,
     onSubmitProfileData: (String) -> Unit
 ) {
     val message = rememberSaveable {
-        mutableStateOf("")
+        mutableStateOf(profileData())
     }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -129,7 +140,7 @@ fun UserProfileEdit(
             modifier = Modifier.padding(top = 10.dp),
             onClick = {
                 onSubmitProfileData(message.value)
-                message.value = ""
+                message.value = message.value
                 keyboardController?.hide()
             }
         ) {

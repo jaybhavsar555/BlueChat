@@ -48,7 +48,7 @@ fun UserListScreen(
     onProfileClick: () -> Unit,
     onGotoAllDevicesClick: () -> Unit,
     onGeneralBackupClick: () -> Unit,
-    profileData: () -> String
+    profileData: (BluetoothDevice) -> String
 ) {
     UserListAppBarr(
         state = state,
@@ -70,7 +70,7 @@ fun UserListAppBarr(
     onProfileClick: () -> Unit,
     onGotoAllDevicesClick: () -> Unit,
     onGeneralBackupClick: () -> Unit,
-    profileData: () -> String
+    profileData: (BluetoothDevice) -> String
 ) {
     Scaffold(
         topBar = {
@@ -125,7 +125,7 @@ fun UserList(
     state: BluetoothUiState,
     onStartClick: () -> Unit,
     onListenClick: (BluetoothDevice) -> Unit,
-    profileData: () -> String
+    profileData: (BluetoothDevice) -> String
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -160,7 +160,7 @@ fun UserList(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    Text(text = profileData() ?: "User", modifier = Modifier.padding(8.dp))
+                    Text(text = profileData(user) ?: "User", modifier = Modifier.padding(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
