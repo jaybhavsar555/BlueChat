@@ -24,17 +24,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.bluechat.domain.chat.BluetoothDevice
+import kotlinx.coroutines.launch
 
 
 data class User(val profilePicture: Any, val username: String)
@@ -72,6 +79,11 @@ fun UserListAppBarr(
     onGeneralBackupClick: () -> Unit,
     profileData: (BluetoothDevice) -> String
 ) {
+    val expanded = remember { mutableStateOf(false) }
+
+    fun toggleMenu() {
+        expanded.value = !expanded.value
+    }
     Scaffold(
         topBar = {
 
@@ -84,11 +96,17 @@ fun UserListAppBarr(
                     Text("BlueChat")
                 },
                 actions = {
-                    IconButton(onClick = onProfileClick) {
+                    IconButton(onClick = { toggleMenu() }) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
                             contentDescription = "more options",
                         )
+                        DropDownOptions(
+                            expanded = expanded,
+                            toggleMenu = { toggleMenu() },
+                            onProfileClick =  onProfileClick,
+                            onGotoAllDevicesClick =  onGotoAllDevicesClick) {
+                        }
                     }
                 }
             )
@@ -119,13 +137,47 @@ fun UserListAppBarr(
     )
 }
 
+@Composable
+fun DropDownOptions(
+    expanded: MutableState<Boolean>,
+    toggleMenu: () -> Unit,
+    onProfileClick: () -> Unit,
+    onGotoAllDevicesClick: () -> Unit,
+    onGeneralBackupClick: () -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Content of the screen goes here
+
+        // Dropdown menu
+        DropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest =  toggleMenu ,
+        ) {
+            DropdownMenuItem(onClick =
+                onProfileClick
+//                toggleMenu
+            ,
+                text = {
+                    Text(text = "Profile")
+                })
+            DropdownMenuItem(onClick =
+                onGotoAllDevicesClick
+//                toggleMenu
+            ,
+                text = {
+                    Text(text = "Go to Devices")
+                })
+            // Add more menu items as needed
+        }
+    }
+}
 
 @Composable
 fun UserList(
     state: BluetoothUiState,
     onStartClick: () -> Unit,
     onListenClick: (BluetoothDevice) -> Unit,
-    profileData: (BluetoothDevice) -> String
+    profileData: (BluetoothDevice) -> String,
 ) {
     Column(
         modifier = Modifier.fillMaxSize()

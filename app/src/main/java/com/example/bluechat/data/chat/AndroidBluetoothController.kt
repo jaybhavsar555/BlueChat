@@ -75,7 +75,7 @@ class AndroidBluetoothController(
     private var currentClientSocket: BluetoothSocket? = null
 
     init {
-        updatePairedDevices()
+//        updatePairedDevices()
         context.registerReceiver(
             bluetoothStateReceiver,
             IntentFilter().apply {
@@ -217,7 +217,7 @@ class AndroidBluetoothController(
     override fun release() {
 //        context.unregisterReceiver(foundDeviceReceiver)
 //        context.unregisterReceiver(bluetoothStateReceiver)
-//        closeConnection()
+        closeConnection()
     }
 
     private fun updatePairedDevices() {
@@ -233,7 +233,7 @@ class AndroidBluetoothController(
     }
 
     private fun hasPermission(permission: String): Boolean {
-        return context.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+        return context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {

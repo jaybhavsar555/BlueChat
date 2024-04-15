@@ -1,15 +1,18 @@
 package com.example.bluechat.presentation
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bluechat.data.chat.toBluetoothDeviceDomain
 import com.example.bluechat.domain.chat.BluetoothController
 import com.example.bluechat.domain.chat.BluetoothDevice
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
+import com.example.bluechat.domain.chat.BluetoothDeviceList
 import com.example.bluechat.domain.chat.ConnectionResult
 import com.example.bluechat.utils.prefs.SharedPreferencesManager
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,11 +20,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val bluetoothController: BluetoothController,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
-    private val chatListDevices = MutableStateFlow<List<BluetoothDevice>>(emptyList())
+    private val chatListDevices: List<String> = emptyList()
     private var deviceAddress: String = ""
 
     private val _state = MutableStateFlow(BluetoothUiState())
@@ -51,6 +55,14 @@ class BluetoothViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
+
+        val savedJsonData =
+            sharedPreferencesManager.getString(SharedPreferencesManager.SAVED_DEVICES)
+        val savedDevicesPrefs =
+            Gson().fromJson(savedJsonData, BluetoothDeviceList::class.java)
+        savedDevicesPrefs?.let {
+            _state.update { it.copy(chatListDevices = savedDevicesPrefs.listDevices) }
+        }
     }
 
     fun connectToDevice(device: BluetoothDeviceDomain) {
@@ -61,14 +73,25 @@ class BluetoothViewModel @Inject constructor(
     }
 
     fun addDeviceToChatList(newDevice: BluetoothDevice) {
+//        val deviceAddress = newDevice.address
+//        val allSavedDevices = if (deviceAddress in chatListDevices) chatListDevices
+//        else
+//            chatListDevices.plusElement(
+//                deviceAddress
+//            )
         _state.update {
-            if (newDevice in it.chatListDevices) it else it.copy(
+            if (newDevice in it.chatListDevices) it.copy(
+                chatListDevices = it.chatListDevices
+            ) else it.copy(
                 chatListDevices = it.chatListDevices.plusElement(
                     newDevice
                 )
             )
         }
-        _state.update { it.copy(isDeviceAddedToChatList = true) }
+        val gson = Gson()
+        val bluetoothDeviceList = BluetoothDeviceList(state.value.chatListDevices)
+        val jsonData = gson.toJson(bluetoothDeviceList)
+        sharedPreferencesManager.saveString(SharedPreferencesManager.SAVED_DEVICES, jsonData)
     }
 
     fun disconnectFromDevice() {
@@ -163,41 +186,27 @@ class BluetoothViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-//        bluetoothController.release()
+        bluetoothController.release()
     }
 
     fun saveProfileData(userData: String) {
-        sharedPreferencesManager.saveString(SharedPreferencesManager.USERNAME, userData)
-    }
-
-    fun handleOnOff(isOn: Boolean) {
-        if (isOn)
-            _state.update { it.copy(isOn = true) }
-    }
-
-    fun handleProfileClick() {
-        _state.update { it.copy(openProfileScreen = true) }
-        Log.d("abhi", "click : ${state.value.openProfileScreen}")
-    }
-
-    fun handleGoToAllDevicesClick() {
-        _state.update { it.copy(openAllDeviceScreen = true) }
-    }
-
-    fun handleGeneralBackupClick() {
-
-    }
-
-    fun handleSingleBackupClick() {
-
+        if (userData.isNotEmpty() && userData.isNotBlank()) {
+            sharedPreferencesManager.saveString(SharedPreferencesManager.USERNAME, userData)
+            Toast.makeText(context, "Username saved", Toast.LENGTH_LONG).show()
+        } else
+            Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show()
     }
 
     fun getSavedSenderProfileDataFromPrefs(device: BluetoothDevice): String {
         device.address?.let { deviceAddress = it }
-        return sharedPreferencesManager.getString(
-            "${SharedPreferencesManager.SENDERNAME}_$deviceAddress",
-            device.name ?: "User"
-        )
+        sharedPreferencesManager.getString(
+            "${SharedPreferencesManager.SENDERNAME}_$deviceAddress"
+        ).let {
+            if (it.isNotBlank() && it.isNotEmpty()) {
+                return it
+            }
+        }
+        return device.name ?: "User"
     }
 
     fun getSavedUserProfileDataFromPrefs(): String {

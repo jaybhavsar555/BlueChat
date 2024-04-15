@@ -11,8 +11,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -30,7 +35,8 @@ fun AllDeviceScreen(
     onStopScan: () -> Unit,
     onStartServer: () -> Unit,
     onScannedDeviceClick: (BluetoothDevice) -> Unit,
-    onPairedDeviceClick: (BluetoothDevice) -> Unit
+    onPairedDeviceClick: (BluetoothDevice) -> Unit,
+    onStartChat: () -> Unit
 ) {
     val customBlue = Color(0xFF4D87F9)
     Column(
@@ -42,6 +48,7 @@ fun AllDeviceScreen(
             scannedDevices = state.scannedDevices,
             onScanDeviceClick = onScannedDeviceClick,
             onPairDeviceClick = onPairedDeviceClick,
+            onStartChat = onStartChat,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -55,9 +62,10 @@ fun AllDeviceScreen(
 //                modifier = Modifier.fillMaxWidth(0.5f),
                 colors = ButtonDefaults.buttonColors(customBlue)
             ) {
-                Text(text = "Start scan",
+                Text(
+                    text = "Start scan",
                     color = Color.White
-                    )
+                )
             }
 //            Button(onClick = onStopScan) {
 //                Text(text = "Stop scan")
@@ -67,8 +75,10 @@ fun AllDeviceScreen(
 //                modifier = Modifier.fillMaxWidth(0.5f),
                 colors = ButtonDefaults.buttonColors(customBlue)
             ) {
-                Text(text = "Start Pair",
-                    color = Color.White)
+                Text(
+                    text = "Start Pair",
+                    color = Color.White
+                )
             }
         }
     }
@@ -81,6 +91,7 @@ fun BluetoothDeviceList(
     scannedDevices: List<BluetoothDevice>,
     onScanDeviceClick: (BluetoothDevice) -> Unit,
     onPairDeviceClick: (BluetoothDevice) -> Unit,
+    onStartChat: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -91,9 +102,18 @@ fun BluetoothDeviceList(
             titleContentColor = Color(0xFF4D87F9),
         ),
         title = {
-            androidx.compose.material3.Text("BlueChat",
+            androidx.compose.material3.Text(
+                "BlueChat",
                 fontWeight = FontWeight.Bold
+            )
+        },
+        actions = {
+            IconButton(onClick = onStartChat) {
+                Icon(
+                    imageVector = Icons.Filled.MailOutline,
+                    contentDescription = "start chat",
                 )
+            }
         }
     )
 
