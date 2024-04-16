@@ -24,9 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bluechat.domain.chat.BluetoothDevice
+import com.example.bluechat.utils.theme.BlueChatTheme
 
 @Composable
 fun AllDeviceScreen(
@@ -38,51 +40,55 @@ fun AllDeviceScreen(
     onPairedDeviceClick: (BluetoothDevice) -> Unit,
     onStartChat: () -> Unit
 ) {
-    val customBlue = Color(0xFF4D87F9)
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        BluetoothDeviceList(
-            pairedDevices = state.pairedDevices,
-            scannedDevices = state.scannedDevices,
-            onScanDeviceClick = onScannedDeviceClick,
-            onPairDeviceClick = onPairedDeviceClick,
-            onStartChat = onStartChat,
+    BlueChatTheme {
+        val customBlue = Color(0xFF4D87F9)
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
+                .fillMaxSize()
         ) {
-            Button(
-                onClick = onStartScan,
-//                modifier = Modifier.fillMaxWidth(0.5f),
-                colors = ButtonDefaults.buttonColors(customBlue)
+            BluetoothDeviceList(
+                pairedDevices = state.pairedDevices,
+                scannedDevices = state.scannedDevices,
+                onScanDeviceClick = onScannedDeviceClick,
+                onPairDeviceClick = onPairedDeviceClick,
+                onStartChat = onStartChat,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text(
-                    text = "Start scan",
-                    color = Color.White
-                )
-            }
+                Button(
+                    onClick = onStartScan,
+//                modifier = Modifier.fillMaxWidth(0.5f),
+                    colors = ButtonDefaults.buttonColors(customBlue)
+                ) {
+                    Text(
+                        text = "Start scan",
+                        color = Color.White
+                    )
+                }
 //            Button(onClick = onStopScan) {
 //                Text(text = "Stop scan")
 //            }
-            Button(
-                onClick = onStartServer,
+                Button(
+                    onClick = onStartServer,
 //                modifier = Modifier.fillMaxWidth(0.5f),
-                colors = ButtonDefaults.buttonColors(customBlue)
-            ) {
-                Text(
-                    text = "Start Pair",
-                    color = Color.White
-                )
+                    colors = ButtonDefaults.buttonColors(customBlue)
+                ) {
+                    Text(
+                        text = "Start Pair",
+                        color = Color.White
+                    )
+                }
             }
         }
     }
+
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -50,7 +50,8 @@ fun ChatScreen(
                     titleContentColor = Color(0xFF4D87F9),
                 ),
                 title = {
-                    androidx.compose.material3.Text("BlueChat")
+//                    androidx.compose.material3.Text(state.messages.last().senderName)
+                        Text("BlueChat")
                 },
                 actions = {
                     IconButton(onClick = onDisconnect) {
