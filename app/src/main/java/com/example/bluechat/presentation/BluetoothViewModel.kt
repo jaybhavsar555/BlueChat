@@ -4,10 +4,12 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bluechat.domain.chat.BluetoothChat
 import com.example.bluechat.domain.chat.BluetoothController
 import com.example.bluechat.domain.chat.BluetoothDevice
 import com.example.bluechat.domain.chat.BluetoothDeviceDomain
 import com.example.bluechat.domain.chat.BluetoothDeviceList
+import com.example.bluechat.domain.chat.BluetoothMessage
 import com.example.bluechat.domain.chat.ConnectionResult
 import com.example.bluechat.utils.prefs.SharedPreferencesManager
 import com.google.gson.Gson
@@ -26,7 +28,7 @@ class BluetoothViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val chatListDevices: List<String> = emptyList()
-    private var deviceAddress: String = ""
+    var deviceAddress: String = ""
 
     private val _state = MutableStateFlow(BluetoothUiState())
     val state = combine(
@@ -121,6 +123,13 @@ class BluetoothViewModel @Inject constructor(
                         messages = it.messages + bluetoothMessage
                     )
                 }
+                val gson = Gson()
+                val bluetoothChat = BluetoothChat(_state.value.messages)
+                val jsonData = gson.toJson(bluetoothChat)
+                sharedPreferencesManager.saveString(
+                    "${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress",
+                    jsonData
+                )
             }
         }
     }
@@ -137,11 +146,18 @@ class BluetoothViewModel @Inject constructor(
         return onEach { result ->
             when (result) {
                 ConnectionResult.ConnectionEstablished -> {
+                    val savedChats =
+                        sharedPreferencesManager.getString("${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress")
+                    val savedChatsPrefs =
+                        Gson().fromJson(savedChats, BluetoothChat::class.java)
+                    var allChats: List<BluetoothMessage> = emptyList()
+                    savedChatsPrefs?.let { allChats = savedChatsPrefs.message }
                     _state.update {
                         it.copy(
                             isConnected = true,
                             isConnecting = false,
-                            errorMessage = null
+                            errorMessage = null,
+                            messages = allChats
                         )
                     }
                 }
@@ -156,6 +172,13 @@ class BluetoothViewModel @Inject constructor(
                     sharedPreferencesManager.saveString(
                         "${SharedPreferencesManager.SENDERNAME}_$deviceAddress",
                         senderMessages.last().senderName
+                    )
+                    val gson = Gson()
+                    val bluetoothChat = BluetoothChat(_state.value.messages)
+                    val jsonData = gson.toJson(bluetoothChat)
+                    sharedPreferencesManager.saveString(
+                        "${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress",
+                        jsonData
                     )
                 }
 

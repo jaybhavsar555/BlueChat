@@ -29,9 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.bluechat.domain.chat.BluetoothChat
+import com.example.bluechat.domain.chat.BluetoothMessage
 import com.example.bluechat.presentation.BluetoothUiState
 import com.example.bluechat.presentation.DevicesList
 import com.example.bluechat.presentation.ProfileScreen
+import com.example.bluechat.utils.prefs.SharedPreferencesManager
+import com.google.gson.Gson
 
 @Preview
 @Composable
@@ -51,7 +55,7 @@ fun ChatScreen(
                 ),
                 title = {
 //                    androidx.compose.material3.Text(state.messages.last().senderName)
-                        Text("BlueChat")
+                    Text("BlueChat")
                 },
                 actions = {
                     IconButton(onClick = onDisconnect) {
@@ -90,7 +94,7 @@ fun ChatScreen(
 fun ChatScreenWindow(
     state: BluetoothUiState,
     onDisconnect: () -> Unit,
-    onSendMessage: (String) -> Unit
+    onSendMessage: (String) -> Unit,
 ) {
     val message = rememberSaveable {
         mutableStateOf("")

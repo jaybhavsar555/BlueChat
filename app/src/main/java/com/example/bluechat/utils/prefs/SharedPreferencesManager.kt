@@ -20,6 +20,7 @@ class SharedPreferencesManager private constructor(context: Context) {
         const val SENDERNAME = "SENDERNAME"
         const val NO_FRESH_INSTALL = "NO_FRESH_INSTALL"
         const val SAVED_DEVICES = "SAVED_DEVICES"
+        const val SAVED_CHATS = "SAVED_CHATS"
     }
 
     fun saveString(key: String, value: String) {
