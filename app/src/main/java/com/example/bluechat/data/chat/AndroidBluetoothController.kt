@@ -204,6 +204,11 @@ class AndroidBluetoothController(
 
         dataTransferService?.sendMessage(bluetoothMessage.toByteArray())
 
+        sharedPreferencesManager.saveString(
+            SharedPreferencesManager.USER_ADDRESS,
+            bluetoothAdapter?.address!!
+        )
+
         return bluetoothMessage
     }
 

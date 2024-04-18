@@ -159,7 +159,8 @@ class MainActivity : ComponentActivity() {
                             senderProfileData = viewModel::getSavedSenderProfileDataFromPrefs,
                             userProfileData = viewModel::getSavedUserProfileDataFromPrefs,
                             onSubmitProfileData = viewModel::saveProfileData,
-                            addDeviceToChatList = viewModel::addDeviceToChatList
+                            addDeviceToChatList = viewModel::addDeviceToChatList,
+                            onGeneralBackupClick = viewModel::handleGeneralBackupClick
                         )
                     }
                 }
@@ -177,7 +178,8 @@ class MainActivity : ComponentActivity() {
         senderProfileData: (BluetoothDevice) -> String,
         userProfileData: () -> String,
         onSubmitProfileData: (String) -> Unit,
-        addDeviceToChatList: (BluetoothDevice) -> Unit
+        addDeviceToChatList: (BluetoothDevice) -> Unit,
+        onGeneralBackupClick: () -> Unit
     ) {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "on_off_screen") {
@@ -199,7 +201,7 @@ class MainActivity : ComponentActivity() {
                     onListenChatClick = connectDevice,
                     onProfileClick = { navController.navigate("profile_screen") },
                     onGotoAllDevicesClick = { navController.navigate("all_device_screen") },
-                    onGeneralBackupClick = {},
+                    onGeneralBackupClick =  onGeneralBackupClick ,
                     profileData = senderProfileData
                 )
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)

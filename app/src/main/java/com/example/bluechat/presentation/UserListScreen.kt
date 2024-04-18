@@ -117,9 +117,10 @@ fun UserListAppBarr(
                         DropDownOptions(
                             expanded = expanded,
                             toggleMenu = { toggleMenu() },
-                            onProfileClick =  onProfileClick,
-                            onGotoAllDevicesClick =  onGotoAllDevicesClick) {
-                        }
+                            onProfileClick = onProfileClick,
+                            onGotoAllDevicesClick = onGotoAllDevicesClick,
+                            onGeneralBackupClick = onGeneralBackupClick
+                        )
                     }
                 }
             )
@@ -156,7 +157,7 @@ fun DropDownOptions(
     toggleMenu: () -> Unit,
     onProfileClick: () -> Unit,
     onGotoAllDevicesClick: () -> Unit,
-    onGeneralBackupClick: () -> Unit,
+    onGeneralBackupClick: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         // Content of the screen goes here
@@ -164,21 +165,26 @@ fun DropDownOptions(
         // Dropdown menu
         DropdownMenu(
             expanded = expanded.value,
-            onDismissRequest =  toggleMenu ,
+            onDismissRequest = toggleMenu,
         ) {
             DropdownMenuItem(onClick =
-                onProfileClick
+            onProfileClick
 //                toggleMenu
-            ,
+                ,
                 text = {
                     Text(text = "Profile")
                 })
             DropdownMenuItem(onClick =
-                onGotoAllDevicesClick
+            onGotoAllDevicesClick
 //                toggleMenu
-            ,
+                ,
                 text = {
                     Text(text = "Go to Devices")
+                })
+            DropdownMenuItem(onClick =
+            onGeneralBackupClick,
+                text = {
+                    Text(text = "Backup")
                 })
             // Add more menu items as needed
         }
@@ -210,7 +216,9 @@ fun UserList(
 
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
 
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -254,19 +262,23 @@ fun UserList(
                         Icon(
                             imageVector = Icons.Filled.PlayArrow,
                             contentDescription = "Start",
-                            modifier = Modifier.clickable {
-                                onStartClick()
-                            }.padding(8.dp)
+                            modifier = Modifier
+                                .clickable {
+                                    onStartClick()
+                                }
+                                .padding(8.dp)
                         )
 
                         Icon(
-                            modifier = Modifier.clickable {
-                                onListenClick(user)
-                            }.padding(10.dp),
+                            modifier = Modifier
+                                .clickable {
+                                    onListenClick(user)
+                                }
+                                .padding(10.dp),
                             painter = painterResource(id = R.drawable.baseline_hearing_24),
                             contentDescription = "Listen",
 
-                        )
+                            )
 
 
                     }
