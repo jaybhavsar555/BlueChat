@@ -1,6 +1,7 @@
 package com.example.bluechat.presentation
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -272,7 +273,8 @@ class BluetoothViewModel @Inject constructor(
         }
         val bluetoothChatToUserAddress =
             BluetoothChatToUserAddress(userAddress, userName, bluetoothChatToSenderAddressList)
-        databaseReference.setValue(bluetoothChatToUserAddress)
+        databaseReference.child("${userAddress}_${Build.MODEL ?: ""}")
+            .setValue(bluetoothChatToUserAddress)
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Toast.makeText(context, "Backup completed successfully", Toast.LENGTH_SHORT)
