@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
     var permissionLauncher: ActivityResultLauncher<Array<String>>? = null
     var enableBluetoothLauncher: ActivityResultLauncher<Intent>? = null
-//    var enableBluetoothDiscoveryLauncher: ActivityResultLauncher<Intent>? = null
+    var enableBluetoothDiscoveryLauncher: ActivityResultLauncher<Intent>? = null
 
     @Inject
     lateinit var sharedPreferencesManager: SharedPreferencesManager
@@ -72,9 +72,9 @@ class MainActivity : ComponentActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) { /* Not needed */ }
 
-//        enableBluetoothDiscoveryLauncher = registerForActivityResult(
-//            ActivityResultContracts.StartActivityForResult()
-//        ) { /* Not needed */ }
+        enableBluetoothDiscoveryLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { /* Not needed */ }
 
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -99,6 +99,11 @@ class MainActivity : ComponentActivity() {
 
             val viewModel = hiltViewModel<BluetoothViewModel>()
             val state by viewModel.state.collectAsState()
+
+            fun startScan() {
+                requestDiscovery()
+                viewModel.startScan()
+            }
 
             LaunchedEffect(key1 = state.errorMessage) {
                 state.errorMessage?.let { message ->
@@ -135,7 +140,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    state.isConnected -> {
+                    state.isConnected && state.chatListDevices.isNotEmpty() -> {
                         ChatScreen(
                             state = state,
                             onDisconnect = viewModel::disconnectFromDevice,
@@ -147,7 +152,7 @@ class MainActivity : ComponentActivity() {
                     else -> {
                         Navigation(
                             state = state,
-                            startScan = viewModel::startScan,
+                            startScan = { startScan() },
                             stopScan = viewModel::stopScan,
                             startServer = viewModel::waitForIncomingConnections,
                             connectDevice = viewModel::connectToDevice,
@@ -197,8 +202,8 @@ class MainActivity : ComponentActivity() {
                     onGeneralBackupClick = {},
                     profileData = senderProfileData
                 )
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    launcher()
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+//                    launcher()
             }
             composable(route = "profile_screen") {
                 ProfileScreen(
@@ -211,11 +216,17 @@ class MainActivity : ComponentActivity() {
             }
             composable(route = "on_off_screen") {
                 if (sharedPreferencesManager.getBoolean(SharedPreferencesManager.NO_FRESH_INSTALL)) {
-                    if (!isBluetoothEnabled || !hasPermission(Manifest.permission.BLUETOOTH_CONNECT) ||
-                        !hasPermission(Manifest.permission.BLUETOOTH_SCAN)) {
-                        launcher()
-                    }
-                    navController.navigate("user_list_screen")
+                    if (!bluetoothAdapter?.isEnabled!!
+//                        || !hasPermission(Manifest.permission.BLUETOOTH_CONNECT) ||
+//                        !hasPermission(Manifest.permission.BLUETOOTH_SCAN)
+                    ) {
+                        BluetoothOnOffScreen(onOnOffClick = {
+                            if (it) {
+                                launcher()
+                                navController.navigate("user_list_screen")
+                            }
+                        })
+                    } else navController.navigate("user_list_screen")
                 } else {
                     BluetoothOnOffScreen(onOnOffClick = {
                         if (it) {
@@ -246,14 +257,16 @@ class MainActivity : ComponentActivity() {
             enableBluetoothLauncher?.launch(
                 Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             )
-
-//        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-//        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 500)
-//        enableBluetoothDiscoveryLauncher?.launch(
-//            intent
-//        )
         } catch (e: Exception) {
         }
+    }
+
+    fun requestDiscovery() {
+        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 500)
+        enableBluetoothDiscoveryLauncher?.launch(
+            intent
+        )
     }
 
     private fun hasPermission(permission: String): Boolean {
