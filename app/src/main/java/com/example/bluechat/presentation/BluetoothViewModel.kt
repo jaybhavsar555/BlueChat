@@ -15,6 +15,7 @@ import com.example.bluechat.domain.chat.BluetoothDeviceDomain
 import com.example.bluechat.domain.chat.BluetoothDeviceList
 import com.example.bluechat.domain.chat.BluetoothMessage
 import com.example.bluechat.domain.chat.ConnectionResult
+import com.example.bluechat.utils.network.NetworkHelper
 import com.example.bluechat.utils.prefs.SharedPreferencesManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,7 +33,8 @@ import javax.inject.Inject
 class BluetoothViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val bluetoothController: BluetoothController,
-    private val sharedPreferencesManager: SharedPreferencesManager
+    private val sharedPreferencesManager: SharedPreferencesManager,
+    private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
     private val chatListDevices: List<String> = emptyList()
@@ -245,47 +247,52 @@ class BluetoothViewModel @Inject constructor(
     }
 
     fun handleGeneralBackupClick() {
-        val firebaseDatabase = FirebaseDatabase.getInstance()
-        val databaseReference = firebaseDatabase.getReference("BluetoothChats")
-        val userAddress =
-            sharedPreferencesManager.getString(SharedPreferencesManager.USER_ADDRESS)
-        val userName = sharedPreferencesManager.getString(SharedPreferencesManager.USERNAME)
-        var bluetoothChatToSenderAddressList: List<BluetoothChatToSenderAddress> = emptyList()
-        val savedJsonData =
-            sharedPreferencesManager.getString(SharedPreferencesManager.SAVED_DEVICES)
-        val savedDevicesPrefs =
-            Gson().fromJson(savedJsonData, BluetoothDeviceList::class.java)
-        savedDevicesPrefs?.let {
-            savedDevicesPrefs.listDevices.forEach { device ->
-                val savedChats =
-                    sharedPreferencesManager.getString("${SharedPreferencesManager.SAVED_CHATS}_${device.address}")
-                val savedChatsPrefs =
-                    Gson().fromJson(savedChats, BluetoothChat::class.java)
-                savedChatsPrefs?.let {
-                    bluetoothChatToSenderAddressList = bluetoothChatToSenderAddressList.plusElement(
-                        BluetoothChatToSenderAddress(
-                            device.address,
-                            device.name, savedChatsPrefs
-                        )
-                    )
+        if (networkHelper.isNetworkConnected()) {
+            val firebaseDatabase = FirebaseDatabase.getInstance()
+            val databaseReference = firebaseDatabase.getReference("BluetoothChats")
+            val userAddress =
+                sharedPreferencesManager.getString(SharedPreferencesManager.USER_ADDRESS)
+            val userName = sharedPreferencesManager.getString(SharedPreferencesManager.USERNAME)
+            var bluetoothChatToSenderAddressList: List<BluetoothChatToSenderAddress> = emptyList()
+            val savedJsonData =
+                sharedPreferencesManager.getString(SharedPreferencesManager.SAVED_DEVICES)
+            val savedDevicesPrefs =
+                Gson().fromJson(savedJsonData, BluetoothDeviceList::class.java)
+            savedDevicesPrefs?.let {
+                savedDevicesPrefs.listDevices.forEach { device ->
+                    val savedChats =
+                        sharedPreferencesManager.getString("${SharedPreferencesManager.SAVED_CHATS}_${device.address}")
+                    val savedChatsPrefs =
+                        Gson().fromJson(savedChats, BluetoothChat::class.java)
+                    savedChatsPrefs?.let {
+                        bluetoothChatToSenderAddressList =
+                            bluetoothChatToSenderAddressList.plusElement(
+                                BluetoothChatToSenderAddress(
+                                    device.address,
+                                    device.name, savedChatsPrefs
+                                )
+                            )
+                    }
                 }
             }
+            val bluetoothChatToUserAddress =
+                BluetoothChatToUserAddress(userAddress, userName, bluetoothChatToSenderAddressList)
+            databaseReference.child("${userAddress}_${Build.MODEL ?: ""}")
+                .setValue(bluetoothChatToUserAddress)
+            databaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Toast.makeText(context, "Backup completed successfully", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, "Backup Failed", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        } else {
+            Toast.makeText(context, "Not connected to Internet", Toast.LENGTH_SHORT).show()
         }
-        val bluetoothChatToUserAddress =
-            BluetoothChatToUserAddress(userAddress, userName, bluetoothChatToSenderAddressList)
-        databaseReference.child("${userAddress}_${Build.MODEL ?: ""}")
-            .setValue(bluetoothChatToUserAddress)
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Toast.makeText(context, "Backup completed successfully", Toast.LENGTH_SHORT)
-                    .show()
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, "Backup Failed", Toast.LENGTH_SHORT).show()
-            }
-        })
-
     }
 }
