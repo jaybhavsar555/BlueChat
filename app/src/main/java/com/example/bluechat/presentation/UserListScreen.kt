@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bluechat.R
 import com.example.bluechat.domain.chat.BluetoothDevice
+import com.example.bluechat.utils.prefs.SharedPreferencesManager
 import kotlinx.coroutines.launch
 
 
@@ -68,7 +69,8 @@ fun UserListScreen(
     onProfileClick: () -> Unit,
     onGotoAllDevicesClick: () -> Unit,
     onGeneralBackupClick: () -> Unit,
-    profileData: (BluetoothDevice) -> String
+    profileData: (BluetoothDevice) -> String,
+    sharedPreferencesManager: SharedPreferencesManager
 ) {
     UserListAppBarr(
         state = state,
@@ -77,7 +79,8 @@ fun UserListScreen(
         onProfileClick = onProfileClick,
         onGotoAllDevicesClick = onGotoAllDevicesClick,
         onGeneralBackupClick = onGeneralBackupClick,
-        profileData = profileData
+        profileData = profileData,
+        sharedPreferencesManager = sharedPreferencesManager
     )
 }
 
@@ -90,7 +93,8 @@ fun UserListAppBarr(
     onProfileClick: () -> Unit,
     onGotoAllDevicesClick: () -> Unit,
     onGeneralBackupClick: () -> Unit,
-    profileData: (BluetoothDevice) -> String
+    profileData: (BluetoothDevice) -> String,
+    sharedPreferencesManager: SharedPreferencesManager
 ) {
     val expanded = remember { mutableStateOf(false) }
 
@@ -134,7 +138,8 @@ fun UserListAppBarr(
                     state = state,
                     onStartClick = onStartChatClick,
                     onListenClick = onListenChatClick,
-                    profileData = profileData
+                    profileData = profileData,
+                    sharedPreferencesManager = sharedPreferencesManager
 //        listOf(
 //            User(profilePicture = Icons.Filled.Person, username = "Alice"),
 //            User(profilePicture = Icons.Filled.Person, username = "Bob"),
@@ -197,12 +202,17 @@ fun UserList(
     onStartClick: () -> Unit,
     onListenClick: (BluetoothDevice) -> Unit,
     profileData: (BluetoothDevice) -> String,
+    sharedPreferencesManager: SharedPreferencesManager
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     )
     {
         for (user in state.chatListDevices) {
+            var deviceName =
+                sharedPreferencesManager.getString("${SharedPreferencesManager.SENDERNAME}_${user.address}")
+            if (deviceName.isBlank())
+                deviceName = user.name ?: "User"
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -244,7 +254,7 @@ fun UserList(
                     }
                     //username
                     Text(
-                        text = profileData(user) ?: "User",
+                        text = deviceName,
                         modifier = Modifier.padding(8.dp),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Medium
@@ -265,6 +275,10 @@ fun UserList(
                             modifier = Modifier
                                 .clickable {
                                     onStartClick()
+                                    sharedPreferencesManager.saveString(
+                                        SharedPreferencesManager.SENDER_ADDRESS,
+                                        user.address!!
+                                    )
                                 }
                                 .padding(8.dp)
                         )
@@ -273,6 +287,10 @@ fun UserList(
                             modifier = Modifier
                                 .clickable {
                                     onListenClick(user)
+                                    sharedPreferencesManager.saveString(
+                                        SharedPreferencesManager.SENDER_ADDRESS,
+                                        user.address!!
+                                    )
                                 }
                                 .padding(10.dp),
                             painter = painterResource(id = R.drawable.baseline_hearing_24),

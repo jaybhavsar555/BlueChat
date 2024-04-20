@@ -38,7 +38,7 @@ class BluetoothViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val chatListDevices: List<String> = emptyList()
-    var deviceAddress: String = ""
+
 
     private val _state = MutableStateFlow(BluetoothUiState())
     val state = combine(
@@ -85,12 +85,6 @@ class BluetoothViewModel @Inject constructor(
     }
 
     fun addDeviceToChatList(newDevice: BluetoothDevice) {
-//        val deviceAddress = newDevice.address
-//        val allSavedDevices = if (deviceAddress in chatListDevices) chatListDevices
-//        else
-//            chatListDevices.plusElement(
-//                deviceAddress
-//            )
         _state.update {
             if (newDevice in it.chatListDevices) it.copy(
                 chatListDevices = it.chatListDevices
@@ -137,7 +131,11 @@ class BluetoothViewModel @Inject constructor(
                 val bluetoothChat = BluetoothChat(_state.value.messages)
                 val jsonData = gson.toJson(bluetoothChat)
                 sharedPreferencesManager.saveString(
-                    "${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress",
+                    "${SharedPreferencesManager.SAVED_CHATS}_${
+                        sharedPreferencesManager.getString(
+                            SharedPreferencesManager.SENDER_ADDRESS
+                        )
+                    }",
                     jsonData
                 )
             }
@@ -157,7 +155,11 @@ class BluetoothViewModel @Inject constructor(
             when (result) {
                 ConnectionResult.ConnectionEstablished -> {
                     val savedChats =
-                        sharedPreferencesManager.getString("${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress")
+                        sharedPreferencesManager.getString("${SharedPreferencesManager.SAVED_CHATS}_${
+                            sharedPreferencesManager.getString(
+                                SharedPreferencesManager.SENDER_ADDRESS
+                            )
+                        }")
                     val savedChatsPrefs =
                         Gson().fromJson(savedChats, BluetoothChat::class.java)
                     var allChats: List<BluetoothMessage> = emptyList()
@@ -180,14 +182,22 @@ class BluetoothViewModel @Inject constructor(
                     }
                     val senderMessages = _state.value.messages.filter { !it.isFromLocalUser }
                     sharedPreferencesManager.saveString(
-                        "${SharedPreferencesManager.SENDERNAME}_$deviceAddress",
+                        "${SharedPreferencesManager.SENDERNAME}_${
+                            sharedPreferencesManager.getString(
+                                SharedPreferencesManager.SENDER_ADDRESS
+                            )
+                        }",
                         senderMessages.last().senderName
                     )
                     val gson = Gson()
                     val bluetoothChat = BluetoothChat(_state.value.messages)
                     val jsonData = gson.toJson(bluetoothChat)
                     sharedPreferencesManager.saveString(
-                        "${SharedPreferencesManager.SAVED_CHATS}_$deviceAddress",
+                        "${SharedPreferencesManager.SAVED_CHATS}_${
+                            sharedPreferencesManager.getString(
+                                SharedPreferencesManager.SENDER_ADDRESS
+                            )
+                        }",
                         jsonData
                     )
                 }
@@ -231,9 +241,13 @@ class BluetoothViewModel @Inject constructor(
     }
 
     fun getSavedSenderProfileDataFromPrefs(device: BluetoothDevice): String {
-        device.address?.let { deviceAddress = it }
+//        device.address?.let { deviceAddress = it }
         sharedPreferencesManager.getString(
-            "${SharedPreferencesManager.SENDERNAME}_$deviceAddress"
+            "${SharedPreferencesManager.SENDERNAME}_${
+                sharedPreferencesManager.getString(
+                    SharedPreferencesManager.SENDER_ADDRESS
+                )
+            }"
         ).let {
             if (it.isNotBlank() && it.isNotEmpty()) {
                 return it
