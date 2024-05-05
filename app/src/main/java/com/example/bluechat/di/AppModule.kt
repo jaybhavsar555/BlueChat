@@ -3,6 +3,7 @@ package com.example.bluechat.di
 import android.content.Context
 import com.example.bluechat.data.chat.AndroidBluetoothController
 import com.example.bluechat.domain.chat.BluetoothController
+import com.example.bluechat.utils.network.NetworkHelper
 import com.example.bluechat.utils.prefs.SharedPreferencesManager
 import dagger.Module
 import dagger.Provides
@@ -29,4 +30,7 @@ object AppModule {
     fun provideSharedPreferencesManager(@ApplicationContext context: Context): SharedPreferencesManager {
         return SharedPreferencesManager.getInstance(context)
     }
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(@ApplicationContext context: Context) = NetworkHelper(context)
 }

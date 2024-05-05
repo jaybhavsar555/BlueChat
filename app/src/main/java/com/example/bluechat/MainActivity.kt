@@ -202,7 +202,8 @@ class MainActivity : ComponentActivity() {
                     onProfileClick = { navController.navigate("profile_screen") },
                     onGotoAllDevicesClick = { navController.navigate("all_device_screen") },
                     onGeneralBackupClick =  onGeneralBackupClick ,
-                    profileData = senderProfileData
+                    profileData = senderProfileData,
+                    sharedPreferencesManager = sharedPreferencesManager
                 )
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 //                    launcher()
