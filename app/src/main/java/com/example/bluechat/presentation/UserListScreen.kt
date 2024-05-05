@@ -244,7 +244,7 @@ fun UserList(
                     }
                     //username
                     Text(
-                        text = profileData(user) ?: "User",
+                        text = profileData(user),
                         modifier = Modifier.padding(8.dp),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Medium

@@ -105,23 +105,23 @@ fun ChatScreenWindow(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "message",
-                modifier = Modifier.weight(1f)
-            )
-//            IconButton(onClick = onDisconnect) {
-//                Icon(
-//                    imageVector = Icons.Default.Close,
-//                    contentDescription = "Disconnect"
-//                )
-//            }
-        }
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+////            Text(
+////                text = "message",
+////                modifier = Modifier.weight(1f)
+////            )
+////            IconButton(onClick = onDisconnect) {
+////                Icon(
+////                    imageVector = Icons.Default.Close,
+////                    contentDescription = "Disconnect"
+////                )
+////            }
+//        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()

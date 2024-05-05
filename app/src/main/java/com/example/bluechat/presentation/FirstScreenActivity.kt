@@ -85,7 +85,7 @@ class FirstScreenActivity() : ComponentActivity() {
                             Text(
                                 text = "Let’s connect on the Bluechat",
                                 modifier = Modifier.weight(2f), // Occupies 3/4th of the available height
-                                fontSize = 35.sp, // Adjust font size as needed
+                                fontSize = 45.sp, // Adjust font size as needed
                                 fontWeight = FontWeight.Bold// Makes the text bold
 //                         fontFamily =  FontDmaily.
                             )
@@ -103,7 +103,7 @@ class FirstScreenActivity() : ComponentActivity() {
                                 Intent(this@FirstScreenActivity, MainActivity::class.java)
                             startActivity(navigate)
                         },
-                            modifier = Modifier.fillMaxWidth(0.5f),
+                            modifier = Modifier.fillMaxWidth(0.6f),
                             colors = ButtonDefaults.buttonColors(customBlue)
 
                         )
@@ -111,8 +111,14 @@ class FirstScreenActivity() : ComponentActivity() {
                             Text("Start")
 
                         }
-
+                        Text(
+                            text = "Design & Developed © Meghan Vaze",
+                            fontWeight = FontWeight.Light,
+                            modifier = Modifier.padding(2.dp)
+                            )
                     }
+
+
                 }
             }
 

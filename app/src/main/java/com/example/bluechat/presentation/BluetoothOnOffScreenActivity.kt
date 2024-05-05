@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -107,12 +108,12 @@ fun OnOffScreenBody(onOnOffClick: (Boolean) -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(15.dp),
             contentAlignment = Alignment.Center
         ) {
             Row {
                 Text(
-                    "Turn on bluethooth to chat with people near you",
+                    "Turn on bluethooth to chat with people near you ",
                     fontSize = 13.sp,
                 )
                 BluetoothSwitchButton(onOnOffClick)

@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 class SharedPreferencesManager private constructor(context: Context) {
 
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("BlueChat", Context.MODE_PRIVATE)
+        context.getSharedPreferences("BlueChat", MODE_PRIVATE)
 
     companion object {
         private var instance: SharedPreferencesManager? = null
